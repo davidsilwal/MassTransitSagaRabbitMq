@@ -1,0 +1,21 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: MasstransitSaga
+services:
+#- name: customer-api
+#  project: Customer.API/Customer.API.csproj
+
+- name: rabbit
+  image: rabbitmq:3-management
+  bindings:
+    - name: ui
+      protocol: http
+      port: 15672
+      containerPort: 15672
+    - name: amqp
+      protocol: amqp
+      port: 5672
