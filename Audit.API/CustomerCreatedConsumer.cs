@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Audit.API
 {
-    public class CustomerCreatedConsumer : IConsumer<CustomerCreated>
+    public class CustomerCreatedAuditConsumer : IConsumer<CustomerCreated>
     {
-        private readonly ILogger<CustomerCreatedConsumer> _logger;
+        private readonly ILogger<CustomerCreatedAuditConsumer> _logger;
 
-        public CustomerCreatedConsumer(ILogger<CustomerCreatedConsumer> logger)
+        public CustomerCreatedAuditConsumer(ILogger<CustomerCreatedAuditConsumer> logger)
         {
             _logger = logger;
         }
@@ -21,10 +21,10 @@ namespace Audit.API
         {
             var customer = context.Message.Customer;
 
-            _logger.LogInformation("Received Text: {FirstName}", customer.FirstName);
+            _logger.LogInformation("Audit.API Received Text: {FirstName}", customer.FirstName);
 
+            //  throw new Exception("uffff");
             return Task.CompletedTask;
-
         }
     }
 }

@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Messaging.API
 {
-    public class CustomerCreatedConsumer : IConsumer<CustomerCreated>
+    public class CustomerCreatedMessagingConsumer : IConsumer<CustomerCreated>
     {
-        private readonly ILogger<CustomerCreatedConsumer> _logger;
+        private readonly ILogger<CustomerCreatedMessagingConsumer> _logger;
 
-        public CustomerCreatedConsumer(ILogger<CustomerCreatedConsumer> logger)
+        public CustomerCreatedMessagingConsumer(ILogger<CustomerCreatedMessagingConsumer> logger)
         {
             _logger = logger;
         }
@@ -21,10 +21,9 @@ namespace Messaging.API
         {
             var customer = context.Message.Customer;
 
-            _logger.LogInformation("Received Text: {FirstName}", customer.FirstName);
+            _logger.LogInformation("Messaging.API Received Text: {FirstName}", customer.FirstName);
 
             return Task.CompletedTask;
-
         }
     }
 }

@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.OpenApi;
 using System;
 using System.Reflection;
+using Messaging.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddBus(builder.Configuration);
 
 var app = builder.Build();
 

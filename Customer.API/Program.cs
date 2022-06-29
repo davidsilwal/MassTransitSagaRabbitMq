@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Shared.Contracts;
 using Shared.Dtos;
 using System.Reflection;
+using Customer.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,12 +18,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddScoped<AppDbContext>();
+builder.Services.AddDbContext<AppDbContext>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
+builder.Services.AddBus(builder.Configuration);
 
 var app = builder.Build();
 AppDbContext.Initialize(app);
@@ -45,8 +47,8 @@ app.MapGet("/customers", async (AppDbContext db) =>
 app.MapGet("/customers/{id}", async (int id, AppDbContext db) =>
     await db.Customers.FindAsync(id)
         is Customer.API.Data.Customer customer
-            ? Results.Ok(customer)
-            : Results.NotFound());
+        ? Results.Ok(customer)
+        : Results.NotFound());
 
 
 app.MapPost("/customers", async (
@@ -54,7 +56,8 @@ app.MapPost("/customers", async (
     AppDbContext db,
     IMapper mapper,
     IBus bus,
-    ILogger<Program> logger) =>
+    ILogger<Program> logger
+) =>
 {
     var customer = mapper.Map<Customer.API.Data.Customer>(customerForCreationDto);
     db.Customers.Add(customer);

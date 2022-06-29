@@ -12,7 +12,6 @@ namespace Audit.API
     {
         public static IServiceCollection AddBus(this IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddMassTransit(o =>
             {
                 o.SetKebabCaseEndpointNameFormatter();
@@ -20,12 +19,12 @@ namespace Audit.API
                 // o.AddSagaStateMachine<CustomerCreationStateMachine, CustomerCreationState>()
                 //  .InMemorySagaRepository();                
 
-                o.AddConsumers(typeof(CustomerCreated).Assembly);
+
+                o.AddConsumers(typeof(CustomerCreatedAuditConsumer).Assembly);
 
                 o.UsingRabbitMq((context, cfg) =>
 
                 {
-
                     cfg.Host("localhost", "/", h =>
                     {
                         h.Username("guest");
@@ -40,5 +39,4 @@ namespace Audit.API
             return services;
         }
     }
-
 }

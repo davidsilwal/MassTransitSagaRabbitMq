@@ -1,10 +1,5 @@
 ﻿using MassTransit;
-using Shared.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Messaging.API
 {
@@ -16,13 +11,11 @@ namespace Messaging.API
             services.AddMassTransit(o =>
             {
                 o.SetKebabCaseEndpointNameFormatter();
-
-
-                o.AddConsumers(typeof(CustomerCreated).Assembly);
+              
+                o.AddConsumers(typeof(CustomerCreatedMessagingConsumer).Assembly);
 
                 o.UsingRabbitMq((context, cfg) =>
                 {
-
                     cfg.Host("localhost", "/", h =>
                     {
                         h.Username("guest");

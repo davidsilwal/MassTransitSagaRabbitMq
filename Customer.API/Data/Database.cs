@@ -39,7 +39,7 @@ public class AppDbContext : DbContext
         }
 
         var generator = new Faker<Customer.API.Data.Customer>()
-            //.RuleFor(m => m.Id, (f, _) => f.IndexFaker)
+         //   .RuleFor(m => m.Id, (f, _) => f.IndexFaker)
             .RuleFor(m => m.FirstName, f => f.Name.FirstName())
             .RuleFor(m => m.LastName, f => f.Name.LastName())
             .RuleFor(m => m.Email, f => f.Person.Email)
