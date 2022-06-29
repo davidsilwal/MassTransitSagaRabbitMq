@@ -53,23 +53,11 @@ app.MapGet("/customers/{id}", async (int id, AppDbContext db) =>
 
 app.MapPost("/customers", async (
     CustomerForCreationDto customerForCreationDto,
-    AppDbContext db,
-    IMapper mapper,
-    IBus bus,
-    ILogger<Program> logger
-) =>
+    IMediator mediator) =>
 {
-    var customer = mapper.Map<Customer.API.Data.Customer>(customerForCreationDto);
-    db.Customers.Add(customer);
-    await db.SaveChangesAsync();
-
-    var customerDto = mapper.Map<CustomerDto>(customer);
-
-    logger.LogInformation("publishing: {FirstName}", customerDto.FirstName);
-
-    await bus.Publish(new CustomerCreated(customerDto));
-
-    return Results.Created($"/customers/{customer.Id}", customer);
+    var command = new CreateCustomerCommand(customerForCreationDto);
+    var response = await mediator.Send(command);
+    return Results.Created($"/customers/{response.Id}", response);
 });
 
 
