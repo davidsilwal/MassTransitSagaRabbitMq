@@ -1,14 +1,11 @@
-using AutoMapper;
-using Customer.API.Data;
 using FluentValidation;
-using MassTransit;
 using MediatR;
-using Microsoft.AspNetCore.OpenApi;
 using Microsoft.EntityFrameworkCore;
-using Shared.Contracts;
 using Shared.Dtos;
 using System.Reflection;
 using Customer.API;
+using Customer.API.Data;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,5 +57,15 @@ app.MapPost("/customers", async (
     return Results.Created($"/customers/{response.Id}", response);
 });
 
+app.MapPost("/customers/saga", async (
+    CustomerForCreationDto customerForCreationDto,
+    IBus bus) =>
+{
+    var command = new CreateCustomer(customerForCreationDto);
+    await bus.Publish(command);
+  //  var customer = response.Message;
+  //  return Results.Created($"/customers/{customer.Id}", customer);
+  return Results.Ok();
+});
 
 app.Run();

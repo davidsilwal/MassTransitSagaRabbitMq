@@ -1,10 +1,6 @@
 ﻿using Shared.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
+using Customer.API.Data;
 using MassTransit;
 using MediatR;
 using Shared.Contracts;
@@ -12,7 +8,6 @@ using Shared.Contracts;
 namespace Customer.API
 {
     public record CreateCustomerCommand(CustomerForCreationDto Customer) : IRequest<CustomerDto>;
-
 
     public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, CustomerDto>
     {
