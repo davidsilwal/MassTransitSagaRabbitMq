@@ -1,10 +1,7 @@
 ﻿using Bogus;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+namespace Customer.API.Data;
 
 public class AppDbContext : DbContext
 {
@@ -15,13 +12,13 @@ public class AppDbContext : DbContext
         Logger = logger;
     }
 
-    public DbSet<Customer.API.Data.Customer> Customers { get; set; } = default!;
+    public DbSet<global::Customer.API.Data.Customer> Customers { get; set; } = default!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
-            .UseSqlite("Data Source=database.db")
-            .LogTo(m => Logger.LogInformation(m),
-                (id, _) => id.Name?.Contains("CommandExecuted") == true);
+           .UseSqlite("Data Source=database.db")
+           .LogTo(m => Logger.LogInformation(m),
+               (id, _) => id.Name?.Contains("CommandExecuted") == true);
 
     public static void Initialize(WebApplication app, int count = 1_000)
     {
@@ -38,12 +35,12 @@ public class AppDbContext : DbContext
             return;
         }
 
-        var generator = new Faker<Customer.API.Data.Customer>()
-         //   .RuleFor(m => m.Id, (f, _) => f.IndexFaker)
-            .RuleFor(m => m.FirstName, f => f.Name.FirstName())
-            .RuleFor(m => m.LastName, f => f.Name.LastName())
-            .RuleFor(m => m.Email, f => f.Person.Email)
-            .RuleFor(m => m.City, f => f.Address.Country());
+        var generator = new Faker<global::Customer.API.Data.Customer>()
+                        //   .RuleFor(m => m.Id, (f, _) => f.IndexFaker)
+                        .RuleFor(m => m.FirstName, f => f.Name.FirstName())
+                        .RuleFor(m => m.LastName, f => f.Name.LastName())
+                        .RuleFor(m => m.Email, f => f.Person.Email)
+                        .RuleFor(m => m.City, f => f.Address.Country());
 
         var chunks = Enumerable.Range(1, count).Chunk(100).Select((v, i) => (Index: i, Value: v.Length)).ToList();
         logger.LogInformation("{ChunkCount} of Chunks To Initialize", chunks.Count);
